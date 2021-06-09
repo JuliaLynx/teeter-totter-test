@@ -9,7 +9,7 @@
                   width: calc(30px + ${weight * 3}px);
                   height: calc(30px + ${weight * 3}px);
                   border-color: transparent transparent ${color} transparent;
-                  border-width: 0 calc((30px + ${weight * 3}px)/2) calc(30px + ${weight * 3}px) calc((30px + ${weight * 3}px)/2);
+                  border-width: 0 calc((30px + ${weight * 3}px)/2) calc(35px + ${weight * 3}px) calc((35px + ${weight * 3}px)/2);
                   bottom: ${isStatic ? 0 : bottom}px;`"
     >
       <span

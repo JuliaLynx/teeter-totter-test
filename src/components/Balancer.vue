@@ -1,7 +1,7 @@
 <template>
-    <div class="balancer">
+    <div class="balancer" :class="{ 'balancer--destroy': isEnd }">
       <div class="balancer__base"></div>
-      <div class="balancer__plank" :style="`transform: rotate(${plankAngle}deg);`">
+      <div class="balancer__plank " :style="`transform: rotate(${plankAngle}deg);`">
         <div class="balancer__left"></div>
         <div class="balancer__right"></div>
       </div>
@@ -39,7 +39,7 @@
   export default {
     name: 'Balancer',
     computed: {
-      ...mapState(['itemsRight', 'itemsLeft', 'plankAngle'])
+      ...mapState(['itemsRight', 'itemsLeft', 'plankAngle', 'isEnd'])
     },
     components: {
       Shape
@@ -97,6 +97,24 @@
     background-color: #000;
     width: 50%;
     height: 10px;
+  }
+  .balancer--destroy{
+    .balancer__left{
+      transform: rotate(-20deg) translate(0px, 80px);
+      transition: all 1s ease;
+    }
+    .balancer__right{
+      transform: rotate(20deg) translate(0px, 80px);
+      transition: all 1s ease;
+    }
+    .balancer__shapes--left{
+      transform: rotate(-20deg) translate(0px, 80px);
+      transition: all 1s ease;
+    }
+    .balancer__shapes--right{
+      transform: rotate(20deg) translate(0px, 80px);
+      transition: all 1s ease;
+    }
   }
   .balancer__shapes {
     position: relative;
