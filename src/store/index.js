@@ -127,6 +127,7 @@ export default new Vuex.Store({
       if(!state.isEnd) {
         await dispatch('addRightFigure');
         await dispatch('addLeftFigure');
+        await dispatch('checkBalance');
       }
     },
 
@@ -185,6 +186,24 @@ export default new Vuex.Store({
      */
     autoMode ({commit}, value) {
       commit('updateMode', value);
+    },
+
+    /**
+     * @param {function} getters
+     * @param {function} dispatch
+     * @param {object} state
+     */
+    checkBalance({getters, dispatch, state}) {
+      let i = 1
+      while(i <= 5) {
+        let angle = ((getters.figuresWeightRight - (getters.figuresWeightLeftWithoutLast + state.itemsLeft[state.itemsLeft.length - 1].weight * i )) * 100 / getters.figuresWeightRight) / 2;
+        if(angle <= 30 && angle >= -30) {
+          break
+        } else {
+          dispatch('gameEnd');
+        }
+        i++;
+      }
     }
   },
 
