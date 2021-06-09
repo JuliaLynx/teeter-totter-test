@@ -56,7 +56,7 @@
     position: absolute;
     right: 0;
     left: 0;
-    bottom: 150px;
+    bottom: 110px;
     margin: 0 auto;
   }
   .balancer__base {
