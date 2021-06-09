@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import Game from '@/components/Game'
-  import EndPopUp from '@/components/EndPopUp'
+  import Game from '@/components/Game';
+  import EndPopUp from '@/components/EndPopUp';
 
   export default {
     name: 'App',

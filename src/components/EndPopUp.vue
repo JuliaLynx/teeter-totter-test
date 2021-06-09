@@ -1,14 +1,14 @@
 <template>
   <div class="popup" v-if="isEnd || isWin">
     <div class="popup__container">
-      <div class="popup__header">{{ isEnd ? 'Game over' : 'You win!!!' }}</div>
+      <div class="popup__header">{{ isEnd ? 'Game over =(' : 'You win!!!' }}</div>
       <button @click="tryAgain" class="popup__button">Try Again</button>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapState, mapActions} from 'vuex'
+  import { mapState, mapActions } from 'vuex';
 
   export default {
     name: 'EndPopUp',
@@ -21,7 +21,7 @@
   }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   .popup {
     width: 100%;
     height: 100%;

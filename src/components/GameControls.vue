@@ -2,33 +2,51 @@
   <div class="game-controls">
     <div class="game-controls__main">
       <div class="game-controls__btn">
-        <button @click="addPause(!isPause)" :disabled="!isStart">{{ isPause ? 'Continue' : 'Pause' }}</button>
-        <button @click="resetSesion" :disabled="!isStart">Reset</button>
+        <button
+            @click="addPause(!isPause)"
+            :disabled="!isStart"
+        >
+          {{ isPause ? 'Continue' : 'Pause' }}
+        </button>
+        <button
+            @click="resetSesion"
+            :disabled="!isStart"
+        >
+          Reset
+        </button>
       </div>
       <div class="game-controls__auto">
         <span  class="switch__label">Auto Mode</span>
         <label  class="switch">
-          <input @change="autoMode(!isAuto)" type="checkbox">
+          <input
+              @change="autoMode(!isAuto)"
+              type="checkbox"
+          >
           <span class="slider round"></span>
         </label>
       </div>
     </div>
     <div class="game-controls__start">
-      <button @click="fallNewFigure" :disabled="isStart">Start</button>
+      <button
+          @click="fallNewFigure"
+          :disabled="isStart"
+      >
+        Start
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
+  import { mapActions, mapState } from 'vuex';
 
   export default {
     name: 'GameControls',
     computed: {
-      ...mapState(['isPause', 'isStart', 'isAuto']),
+      ...mapState(['isPause', 'isStart', 'isAuto'])
     },
     methods: {
-      ...mapActions(['fallNewFigure', 'addPause', 'resetSesion', 'autoMode']),
+      ...mapActions(['fallNewFigure', 'addPause', 'resetSesion', 'autoMode'])
     }
   }
 </script>

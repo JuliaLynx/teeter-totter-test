@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const colors = ['#feeeb3', '#c8e5c9', '#b4e5fa', '#d1c4e0', '#f9bcd1'];
 const forms = ['square', 'circle', 'triangle'];
 
 export default new Vuex.Store({
-  state:{
+  state: {
     itemsLeft: [],
     itemsRight: [],
     figureCounterRight: 0,
@@ -22,122 +22,224 @@ export default new Vuex.Store({
     defeatsCounter: 0,
     isAuto: false
   },
-  getters:{
-    figuresWeightLeft(state){
+
+  getters: {
+    /**
+     * @param {object} state
+     */
+    figuresWeightLeft (state) {
       return state.itemsLeft.reduce(function(acc, currentValue) {
         return acc + currentValue.weight * (5 - currentValue.position);
-      }, 0)
+      }, 0);
     },
-    figuresWeightRight(state){
+
+    /**
+     * @param {object} state
+     */
+    figuresWeightRight (state) {
       return state.itemsRight.reduce(function(acc, currentValue) {
         return acc + currentValue.weight * (5 - currentValue.position);
-      }, 0)
+      }, 0);
     },
-    figuresWeightLeftWithoutLast(state){
+
+    /**
+     * @param {object} state
+     */
+    figuresWeightLeftWithoutLast (state) {
       return state.itemsLeft.reduce(function(acc, currentValue) {
         let weight = currentValue.id === state.figureCounterLeft - 1 ? 0 : currentValue.weight;
-        // console.log(currentValue.id, state.figureCounterLeft, weight * (5 - currentValue.position))
         return acc + weight * (5 - currentValue.position);
-      }, 0)
-    },
+      }, 0);
+    }
   },
+
   actions: {
-    addLeftFigure({state, commit}){
+    /**
+     * @param {function} commit
+     * @param {object} state
+     */
+    addLeftFigure ({commit, state}) {
       const data  = {
         id: state.figureCounterLeft,
         weight: Math.floor(Math.random() * 10 ) + 1,
         position: Math.floor(Math.random() * 5 ),
         color: colors[Math.floor(Math.random() * 5 )],
-        form: forms[Math.floor(Math.random() * 3)],
+        form: forms[Math.floor(Math.random() * 3)]
       }
+
       commit('updateLeftFigure', data);
     },
-    addRightFigure({state, commit}){
+
+    /**
+     * @param {function} commit
+     * @param {object} state
+     */
+    addRightFigure ({commit, state}) {
       const data  = {
         id: state.figureCounterRight,
         weight: Math.floor(Math.random() * 10 ) + 1,
         position: Math.floor(Math.random() * 5 ),
         color: colors[Math.floor(Math.random() * 5 )],
-        form: forms[Math.floor(Math.random() * 3)],
+        form: forms[Math.floor(Math.random() * 3)]
       }
+
       commit('updateRightFigure', data);
     },
-    plankBalance({getters, state, commit, dispatch}){
+
+    /**
+     * @param {function} getters
+     * @param {function} commit
+     * @param {function} dispatch
+     * @param {object} state
+     */
+    plankBalance ({getters, commit, dispatch, state}) {
       let angle = ((getters.figuresWeightRight - getters.figuresWeightLeft) * 100 / getters.figuresWeightRight) / 2
-      if(angle >= 30){
+
+      if(angle >= 30) {
         angle = 30;
-        dispatch('gameEnd')
+        dispatch('gameEnd');
       }
-      if(angle <= -30){
+
+      if(angle <= -30) {
         angle = -30;
-        dispatch('gameEnd')
+        dispatch('gameEnd');
       }
+
       commit('updateAngle', angle);
-      if(state.figureCounterLeft === state.maxFiguresNumber){
-        dispatch('gameWin')
+
+      if(state.figureCounterLeft === state.maxFiguresNumber) {
+        dispatch('gameWin');
       }
     },
 
-    async fallNewFigure({state, dispatch}){
+    /**
+     * @param {function} dispatch
+     * @param {object} state
+     */
+    async fallNewFigure({dispatch, state}) {
       await dispatch('plankBalance');
-      if(state.isWin){
+
+      if(state.isWin) {
+
         return
       }
-      if(!state.isEnd){
+
+      if(!state.isEnd) {
         await dispatch('addRightFigure');
         await dispatch('addLeftFigure');
       }
     },
-    addNewPosition({commit}, itemData){
+
+    /**
+     * @param {function} commit
+     * @param {object} itemData
+     */
+    addNewPosition ({commit}, itemData) {
       commit('updatePosition', itemData);
     },
-    addPause({commit}, value){
+
+    /**
+     * @param {function} commit
+     * @param {boolean} value
+     */
+    addPause ({commit}, value) {
       commit('updatePause', value);
     },
-    resetSesion({commit}){
+
+    /**
+     * @param {function} commit
+     */
+    resetSesion ({commit}) {
       commit('updateSesion');
-      commit('updateAngle', 0)
+      commit('updateAngle', 0);
     },
-    gameEnd({commit}){
+
+    /**
+     * @param {function} commit
+     */
+    gameEnd ({commit}) {
       commit('updateEnd');
     },
-    gameWin({commit}){
+
+    /**
+     * @param {function} commit
+     */
+    gameWin ({commit}) {
       commit('updateWin');
     },
-    async tryAgain({dispatch, commit}){
+
+    /**
+     * @param {function} commit
+     * @param {function} dispatch
+     */
+    async tryAgain ({commit, dispatch}) {
       commit('updateEnd', false);
       commit('updateWin', false);
       await dispatch('resetSesion');
       await dispatch('fallNewFigure');
     },
-    autoMode({commit}, value){
+
+    /**
+     * @param {function} commit
+     * @param {boolean} value
+     */
+    autoMode ({commit}, value) {
       commit('updateMode', value);
     }
   },
+
   mutations: {
-    updateLeftFigure(state, data){
+    /**
+     * @param {object} state
+     * @param {object} data
+     */
+    updateLeftFigure (state, data) {
       state.itemsLeft.push(data);
       state.figureCounterLeft++;
-      state.isStart = true
+      state.isStart = true;
     },
-    updateRightFigure(state, data){
+
+    /**
+     * @param {object} state
+     * @param {object} data
+     */
+    updateRightFigure (state, data) {
       state.itemsRight.push(data);
       state.figureCounterRight++;
     },
-    updateAngle(state, data){
-      state.plankAngle = data
+
+    /**
+     * @param {object} state
+     * @param {number} data
+     */
+    updateAngle (state, data) {
+      state.plankAngle = data;
     },
-    updatePosition(state, itemData){
+
+    /**
+     * @param {object} state
+     * @param {object} itemData
+     */
+    updatePosition (state, itemData) {
       state.itemsLeft.map(
-          function(item){
-            return item.id === itemData.id ? item.position = itemData.position : item
-          }
-      )
+        function (item) {
+          return item.id === itemData.id ? item.position = itemData.position : item;
+        }
+      );
     },
-    updatePause(state, value){
-      state.isPause = value
+
+    /**
+     * @param {object} state
+     * @param {boolean} value
+     */
+    updatePause (state, value) {
+      state.isPause = value;
     },
-    updateSesion(state){
+
+    /**
+     * @param {object} state
+     */
+    updateSesion (state) {
       state.itemsLeft = [];
       state.itemsRight = [];
       state.isStart = false;
@@ -145,18 +247,33 @@ export default new Vuex.Store({
       state.figureCounterLeft = 0;
       state.figureCounterRight = 0;
     },
-    updateEnd(state, value = true){
+
+    /**
+     * @param {object} state
+     * @param {boolean} value
+     */
+    updateEnd (state, value = true) {
       state.isEnd = value;
       state.isPause = value;
-      value ? state.defeatsCounter++ : state.defeatsCounter
+      value ? state.defeatsCounter++ : state.defeatsCounter;
     },
-    updateWin(state, value = true){
+
+    /**
+     * @param {object} state
+     * @param {boolean} value
+     */
+    updateWin (state, value = true) {
       state.isWin = value;
       state.isPause = value;
-      value ? state.winsCounter++ : state.winsCounter
+      value ? state.winsCounter++ : state.winsCounter;
     },
-    updateMode(state, value = true){
+
+    /**
+     * @param {object} state
+     * @param {boolean} value
+     */
+    updateMode (state, value = true) {
       state.isAuto = value;
     }
   }
-})
+});

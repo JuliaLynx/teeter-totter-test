@@ -12,97 +12,124 @@
                   border-width: 0 calc((30px + ${weight * 3}px)/2) calc(30px + ${weight * 3}px) calc((30px + ${weight * 3}px)/2);
                   bottom: ${isStatic ? 0 : bottom}px;`"
     >
-          <span
-              :style="`bottom: calc(-1 * (30px + ${weight * 3}px)/2 - 15px);
-                    left: calc(-1 *(30px + ${weight * 3}px)/2);
-                    width: calc(30px + ${weight * 3}px);`"
-          >{{`${weight} kg`}}</span>
+      <span
+          :style="`bottom: calc(-1 * (30px + ${weight * 3}px)/2 - 15px);
+                left: calc(-1 *(30px + ${weight * 3}px)/2);
+                width: calc(30px + ${weight * 3}px);`"
+      >
+        {{`${weight} kg`}}
+      </span>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapActions, mapState, mapGetters} from 'vuex'
+  import { mapActions, mapState, mapGetters } from 'vuex';
 
   export default {
     name: 'Shape',
+
     props: ['id', 'weight', 'position', 'color', 'form', 'isStatic'],
+
     data: () => ({
       bottom: 400,
       positionX: 0,
-      fallInteval: {},
+      fallInterval: {},
     }),
+
     computed: {
       ...mapState(['isPause', 'isAuto', 'plankAngle']),
       ...mapGetters(['figuresWeightRight', 'figuresWeightLeft', 'figuresWeightLeftWithoutLast']),
-      isFallen(){
-        return this.bottom <= 0
+
+      isFallen() {
+        return this.bottom <= 0;
       },
-      positionLeft(){
-        return this.isStatic ? 'auto' : `${this.positionX * 20}%`
+
+      positionLeft() {
+        return this.isStatic ? 'auto' : `${this.positionX * 20}%`;
       },
-      positionRight(){
-        return this.isStatic ? `${this.position * 20}%` : 'auto'
+
+      positionRight() {
+        return this.isStatic ? `${this.position * 20}%` : 'auto';
       }
     },
+
     methods: {
       ...mapActions(['fallNewFigure', 'addNewPosition']),
-      fallAnimate(){
+
+      fallAnimate() {
         if (this.isStatic) {
+
           return;
         }
 
-        this.fallInteval = setInterval(() => {
-          if(this.bottom > 0){
-            this.bottom = this.isPause ? this.bottom : this.bottom - 10
+        this.fallInterval = setInterval(() => {
+          if(this.bottom > 0) {
+            this.bottom = this.isPause ? this.bottom : this.bottom - 10;
           } else {
-            clearInterval(this.fallInteval)
-            this.fallNewFigure()
+            clearInterval(this.fallInterval);
+
+            this.fallNewFigure();
           }
         }, 600 / (this.id + 1));
       },
-      changePosition(e){
-        if(this.isFallen || this.isPause || this.isStatic){
-          return
-        }
-        if(!this.isAuto){
-          if(e.keyCode === 37 && this.positionX > 0){
-            this.positionX--
-          }
-          if(e.keyCode === 39 && this.positionX < 4){
-            this.positionX++
-          }
-        }
-        if(e.keyCode === 40 && this.bottom > 30){
-          this.bottom = this.bottom - 30
+
+      /**
+       * @param {object} e
+       */
+      changePosition(e) {
+        if(this.isFallen || this.isPause || this.isStatic) {
+
+          return;
         }
 
-        this.addNewPosition({id: this.id, position: this.positionX})
+        if(!this.isAuto)  {
+
+          if(e.keyCode === 37 && this.positionX > 0) {
+            this.positionX--;
+          }
+
+          if(e.keyCode === 39 && this.positionX < 4) {
+            this.positionX++;
+          }
+        }
+
+        if(e.keyCode === 40 && this.bottom > 30) {
+          this.bottom = this.bottom - 30;
+        }
+
+        this.addNewPosition({id: this.id, position: this.positionX});
       },
-      autoPosition(){
-        if(this.isAuto){
-          this.positionX = 5 - Math.round((this.figuresWeightRight - this.figuresWeightLeftWithoutLast) / this.weight)
-          if(this.positionX >= 4){
+
+      autoPosition() {
+        if(this.isAuto) {
+          this.positionX = 5 - Math.round((this.figuresWeightRight - this.figuresWeightLeftWithoutLast) / this.weight);
+
+          if(this.positionX >= 4) {
             this.positionX = 4;
           }
-          if(this.positionX <= 0){
+
+          if(this.positionX <= 0) {
             this.positionX = 0;
           }
-          console.log(this.figuresWeightLeftWithoutLast, this.figuresWeightRight, this.weight)
-          this.addNewPosition({id: this.id, position: this.positionX})
+
+          this.addNewPosition({id: this.id, position: this.positionX});
         }
       }
     },
-    mounted(){
+
+    mounted() {
       this.fallAnimate();
       this.positionX = this.position;
       this.autoPosition();
     },
-    created(){
+
+    created() {
       window.addEventListener('keydown', this.changePosition);
     },
-    destroyed(){
-      clearInterval(this.fallInteval);
+
+    destroyed() {
+      clearInterval(this.fallInterval);
     }
   }
 </script>
