@@ -26,6 +26,12 @@
 <script>
   import { mapActions, mapState, mapGetters } from 'vuex';
 
+  const controls  = {
+    LEFT: 37,
+    RIGHT: 39,
+    BOTTOM: 40
+  }
+
   export default {
     name: 'Shape',
 
@@ -85,17 +91,17 @@
 
         if(!this.isAuto)  {
 
-          if(e.keyCode === 37 && this.positionX > 0) {
+          if(e.keyCode === controls.LEFT && this.positionX > 0) {
             this.positionX--;
           }
 
-          if(e.keyCode === 39 && this.positionX < 4) {
+          if(e.keyCode === controls.RIGHT && this.positionX < 4) {
             this.positionX++;
           }
         }
 
-        if(e.keyCode === 40 && this.bottom > 30) {
-          this.bottom = this.bottom - 30;
+        if(e.keyCode === controls.BOTTOM && this.bottom !== 0) {
+          this.bottom = this.bottom - 30 < 0 ? 0 : this.bottom - 30;
         }
 
         this.addNewPosition({id: this.id, position: this.positionX});
@@ -140,8 +146,8 @@
     bottom: 0;
     opacity: 0.8;
     display: block;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     &-square{
       span{
         left: 0 !important;

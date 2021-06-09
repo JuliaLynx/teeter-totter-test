@@ -16,8 +16,8 @@
         </button>
       </div>
       <div class="game-controls__auto">
-        <span  class="switch__label">Auto Mode</span>
-        <label  class="switch">
+        <span class="switch__label">Auto Mode</span>
+        <label class="switch">
           <input
               @change="autoMode(!isAuto)"
               type="checkbox"
@@ -58,19 +58,24 @@
     z-index: 10;
     position: relative;
     width: 70vw;
+    button[disabled="disabled"] {
+      cursor: default;
+      border: solid 1px rgba(#2196F3, 0.3);
+    }
   }
   .game-controls__main{
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     button{
-      min-width: 80px;
+      min-width: 100px;
       height: 30px;
       margin-right: 10px;
       background-color: #fff;
       border: solid 1px #2196F3;
       border-radius: 5px;
       font-size: 16px;
+      cursor: pointer;
     }
   }
   .game-controls__btn{
@@ -78,12 +83,13 @@
   }
   .game-controls__start{
     button{
-      width: 150px;
+      width: 180px;
       height: 30px;
       background-color: #fff;
       border: solid 1px #2196F3;
       border-radius: 5px;
       font-size: 16px;
+      cursor: pointer;
     }
   }
   .game-controls__auto{
@@ -112,7 +118,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #fff;
+    border: solid 1px #2196F3;
     -webkit-transition: .4s;
     transition: .4s;
   }
@@ -121,14 +128,18 @@
     content: "";
     height: 26px;
     width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
+    left: 2px;
+    bottom: 2px;
+    background-color: #2196F3;
+    border: solid 1px #2196F3;
     -webkit-transition: .4s;
     transition: .4s;
   }
   input:checked + .slider {
     background-color: #2196F3;
+  }
+  input:checked + .slider:before {
+    background-color: #fff;
   }
   input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;

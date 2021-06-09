@@ -56,28 +56,29 @@
     position: absolute;
     right: 0;
     left: 0;
-    bottom: 0;
+    bottom: 150px;
     margin: 0 auto;
   }
   .balancer__base {
     background-image: url('../assets/base.svg');
     background-position: center center;
     background-size: cover;
-    width: 300px;
-    height: 200px;
+    width: 250px;
+    height: 170px;
     margin: 0 auto;
     position: relative;
     &:after{
       content: '';
       position: absolute;
-      top: -40px;
+      top: -33px;
       left: 0;
       right: 0;
       margin: 0 auto;
-      width: 80px;
-      height: 80px;
+      width: 50px;
+      height: 50px;
       display: block;
-      background-color: #000;
+      background-color: #fff;
+      border: solid 5px #000000;
       border-radius: 50%;
       z-index: 10;
     }
